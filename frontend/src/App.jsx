@@ -2,15 +2,17 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [page, setPage] = useState("home"); // minuscule
+  const [page, setPage] = useState("home"); // home | game | end
   const [playerName, setPlayerName] = useState("");
+  const [score, setScore] = useState(0);
+
 
   function StartGame() {
     if (playerName.trim() === "") {
       alert("Entre ton nom !");
       return;
     }
-    setPage("game"); // minuscule
+    setPage("game"); 
   }
 
   return (
@@ -31,18 +33,28 @@ function App() {
         </div>
       )}
 
-      {page === "game" && <GamePage playerName={playerName} />}
+      {page === "game" && (
+  <GamePage
+    playerName={playerName}
+    score={score}
+    setScore={setScore}
+    setPage={setPage}
+  />
+)}
+
+      {page === "end" && <EndPage score={score} />}
     </div>
   );
 }
 
-function GamePage({ playerName }) {
+function GamePage({ playerName, score, setScore, setPage }) {
+
   const [grid] = useState([
     [0, 0, 0],
     [0, 0, 0],
     [0, 0, 0],
   ]);
-  const [score, setScore] = useState(0);
+  
 
   const TileClick = (rowIndex, colIndex) => {
     console.log("Case Cliquée :", rowIndex, colIndex);
@@ -70,6 +82,19 @@ function GamePage({ playerName }) {
           </div>
         ))}
       </div>
+      <button onClick={() => setPage("end")}>
+        Fin du jeu (test)
+        </button>
+
+    </div>
+  );
+}
+
+function EndPage({ score }) {
+  return (
+    <div className="EndPage">
+      <h1>Jeu Terminé !</h1>  
+      <p>Ton score final est : {score}</p>
     </div>
   );
 }
