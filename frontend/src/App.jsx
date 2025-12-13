@@ -42,7 +42,8 @@ function App() {
   />
 )}
 
-      {page === "end" && <EndPage score={score} />}
+    {page === "end" && <EndPage score={score} playerName={playerName} />}
+
     </div>
   );
 }
