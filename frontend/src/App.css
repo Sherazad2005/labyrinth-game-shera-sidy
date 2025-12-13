@@ -1,0 +1,50 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;     
+  text-align: center;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #131720;
+  font-family: sans-serif;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 16px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.grid-row {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.tile {
+  width: 60px;
+  height: 60px;
+  flex: 1;
+  max-width: 60px;
+  border: none;
+  background: #1f2937;
+  color: #f9fafb;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.tile:hover {
+  background: #374151;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
