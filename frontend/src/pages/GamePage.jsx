@@ -6,7 +6,9 @@ import Inventory from "../components/Inventory";
 import Modal from "../components/Modal"
 
 
+
 function GamePage({ playerName, score, setScore, setPage }) {
+
   
   const [level, setLevel] = useState(null);
 
@@ -37,6 +39,8 @@ function GamePage({ playerName, score, setScore, setPage }) {
         setLoading(false);               
       }
     }
+
+    setLoading(true); // show the reload screen between every lvl
     loadLevel();
   }, [currentLevelId]); 
 
@@ -125,10 +129,10 @@ function GamePage({ playerName, score, setScore, setPage }) {
       setModalmessage("You've ran into a trap hahahaha skill issues much ?")
     }
     if (tileValue === "E") { // sortie
+
   setModalmessage("Well done you finished the level !");
   setIsModalOpen(true);
   setTimeout(() => {
-    console.log("isLastLevel ?", level.isLastLevel);
         if (level.isLastLevel) {
           setPage("end");
         } else {
@@ -139,8 +143,9 @@ function GamePage({ playerName, score, setScore, setPage }) {
         
     }
   }, 1500);
-  return
-}
+  return;
+    }
+
 
     console.log("Clicked case :", x, y, "valeur :", tileValue);
   };
