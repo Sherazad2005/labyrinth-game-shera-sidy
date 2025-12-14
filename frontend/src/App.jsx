@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "./App.css";
 import GamePage from "./pages/GamePage";
+import EndPage from "./pages/EndPage";
+
 
 function App() {
   const [page, setPage] = useState("home"); // home | game | end
@@ -56,16 +58,6 @@ function App() {
 }
 
 
-
-
-function EndPage({ score }) {
-  return (
-    <div className="EndPage">
-      <h1>Jeu Terminé !</h1>  
-      <p>Ton score final est : {score}</p>
-    </div>
-  );
-}
 
 export default App;
 
