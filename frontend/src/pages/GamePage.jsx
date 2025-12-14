@@ -5,12 +5,20 @@ import StatusBar from "../components/StatusBar";
 import Inventory from "../components/Inventory";
 import Modal from "../components/Modal"
 
-function GamePage({ playerName, score, setScore, setPage, currentLevelId, setCurrentLevelId, }) {
+
+
+function GamePage({ playerName, score, setScore, setPage }) {
+
   
   const [level, setLevel] = useState(null);
+
+  const [currentLevelId, setCurrentLevelId] = useState(1);
+
   const [loading, setLoading] = useState(true);
   
   const [playerPos, setPlayerPos] = useState(null); //player position
+
+  const [revealedTiles, setRevealedTiles] = useState([]);
 
   const [inventory, setInventory] = useState([]); //picked up items
 
@@ -23,7 +31,8 @@ function GamePage({ playerName, score, setScore, setPage, currentLevelId, setCur
       try {
         const data = await fetchLevel(currentLevelId); 
         setLevel(data);
-        setPlayerPos({ row: data.start.row, col : data.start.col });                 
+        setPlayerPos({ row: data.start.row, col : data.start.col });    
+        setRevealedTiles([{ row: data.start.row, col: data.start.col }]);            
       } catch (error) {
         console.error("Erreur lors du chargement du niveau :", error);
       } finally {
@@ -38,6 +47,17 @@ function GamePage({ playerName, score, setScore, setPage, currentLevelId, setCur
   
   if (loading) return <div>Chargement...</div>;
   if (!level) return <div>Impossible de charger le niveau</div>;
+
+  const revealTile = (y, x) => {
+  setRevealedTiles((prev) => {
+    const alreadyRevealed = prev.some(
+      (t) => t.row === y && t.col === x
+    );
+    if (alreadyRevealed) return prev;
+    return [...prev, { row: y, col: x }];
+  });
+};
+
 
   const handleTileClick = (y, x) => {
     const tileValue = level.grid[y][x];
@@ -109,6 +129,7 @@ function GamePage({ playerName, score, setScore, setPage, currentLevelId, setCur
       setModalmessage(`You picked up a ${color}`);
       setIsModalOpen(true);
       setPlayerPos({ row: y, col: x });
+      revealTile(y, x);
       return;
     }
 
@@ -146,6 +167,8 @@ function GamePage({ playerName, score, setScore, setPage, currentLevelId, setCur
       return;
     }
     setPlayerPos({ row: y, col: x});
+    revealTile(y, x);
+
 
     if (tileValue.startsWith("I:")) {
       const itemId = tileValue.split(":")[1];
@@ -179,16 +202,27 @@ function GamePage({ playerName, score, setScore, setPage, currentLevelId, setCur
       setModalmessage("You've ran into a trap hahahaha skill issues much ?")
     }
     if (tileValue === "E") { // sortie
-    setModalmessage("Well done you finished the level !");
-    setIsModalOpen(true);
-    setTimeout(() => {
-    setIsModalOpen(false);
-    setCurrentLevelId((prev) => prev + 1); //go next lvel 
+
+  setModalmessage("Well done you finished the level !");
+  setIsModalOpen(true);
+  setTimeout(() => {
+        if (level.isLastLevel) {
+          setPage("end");
+        } else {
+          setCurrentLevelId((prev) => prev + 1);
+          setInventory([]); // reset inventory for next level
+          setRevealedTiles([]); // reset revealed tiles for next level
+          setIsModalOpen(false);
+        
+    }
   }, 1500);
-}
+  return;
+    }
+
 
     console.log("Clicked case :", x, y, "valeur :", tileValue);
   };
+  
 
   return (
     <div className="game-page">
@@ -201,7 +235,7 @@ function GamePage({ playerName, score, setScore, setPage, currentLevelId, setCur
 
       {/* main zone grid and inventory*/}
       <div className="game-layout">
-        <Grid grid={level.grid} onTileClick={handleTileClick} playerPos={playerPos} />
+        <Grid grid={level.grid} onTileClick={handleTileClick} playerPos={playerPos} revealedTiles={revealedTiles} />
           <Inventory items={inventory}/>
         </div>
         {/*text popup for success or defeat of the player*/}
