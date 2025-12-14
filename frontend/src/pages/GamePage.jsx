@@ -44,6 +44,46 @@ function GamePage({ playerName, score, setScore, setPage, currentLevelId, setCur
       
     console.log("CLICK", y, x);
 
+    // obstacles hehe O type
+    if (tileValue.startsWith("O:")) {
+      const type = tileValue.split(":")[1];
+
+      if (type === "fire") {
+        const hasWater = inventory.includes("Item:water_bucket");
+        if(!hasWater) {
+          setModalmessage("Somebody set your path ablaze x) u gonna need some water");
+          setIsModalOpen(true);
+          return;
+        }
+      }
+      
+      if (type === "rock") {
+        const hasPickaxe = inventory.includes("Item:pickaxe");
+        if (!hasPickaxe) {
+          setModalmessage("there's a rock on your path go get a pickaxe");
+          setIsModalOpen(true);
+          return;
+        }
+      }
+
+      if (type === "water") {
+        const hasBoots = inventory.includes ("Item:swim_boots");
+        if (!hasBoots) {
+          setModalmessage("Them waters be deep, go and get you some boots");
+          setIsModalOpen(true);
+          return;
+        }
+      }
+
+
+      //if you got the item you can pass
+      setPlayerPos({ row: y, col: x });
+      setModalmessage("You overcame the obstacle, well done");
+      setIsModalOpen(true);
+      return;
+    }
+
+
     //we need to check if the tile is next to our position we using the math function 
     if (playerPos) {
       const dist = 
@@ -89,7 +129,40 @@ function GamePage({ playerName, score, setScore, setPage, currentLevelId, setCur
       return;
     }
 
+    //ennemi M type
+    if (tileValue.startsWith("M:")) {
+      const hasWeapon = inventory.some((item) => item.startsWith("Weapon:"));
+
+      if (!hasWeapon) {
+        setModalmessage("You can't fight without a weapon bruh");
+        setIsModalOpen(true);
+        return; //blocked
+      }
+
+      //with a weapon (victory)
+      setModalmessage("you've slain an ennemy");
+      setIsModalOpen(true);
+      setPlayerPos({ row: y, col: x }) // moving to the ennemy tile
+      return;
+    }
     setPlayerPos({ row: y, col: x});
+
+    if (tileValue.startsWith("I:")) {
+      const itemId = tileValue.split(":")[1];
+      setInventory((prev) => [...prev, `Item:${itemId}`]);
+      setModalmessage(`You picked up ${itemId}`);
+      setIsModalOpen(true);
+      setPlayerPos({ row: y, col: x });
+      return;
+    }
+
+    // easy weap like a pickaxe can also be a weapon cause why not
+
+    if (tileValue === "I:pickaxe") {
+      setInventory((prev) => [...prev,
+        "Weapon:pickaxe"
+      ]);
+    }
 
     if (tileValue === "C") {
       //Small bonus
