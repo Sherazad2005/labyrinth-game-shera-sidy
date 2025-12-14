@@ -6,6 +6,7 @@ function App() {
   const [page, setPage] = useState("home"); // home | game | end
   const [playerName, setPlayerName] = useState("");
   const [score, setScore] = useState(0);
+  const [currentLevelId, setCurrentLevelId] = useState(1);
 
 
   function StartGame() {
@@ -40,6 +41,8 @@ function App() {
     score={score}
     setScore={setScore}
     setPage={setPage}
+    currentLevelId={currentLevelId}
+    setCurrentLevelId={setCurrentLevelId}
   />
 )}
 

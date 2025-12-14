@@ -5,7 +5,7 @@ import StatusBar from "../components/StatusBar";
 import Inventory from "../components/Inventory";
 import Modal from "../components/Modal"
 
-function GamePage({ playerName, score, setScore, setPage }) {
+function GamePage({ playerName, score, setScore, setPage, currentLevelId, setCurrentLevelId, }) {
   
   const [level, setLevel] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,7 +21,7 @@ function GamePage({ playerName, score, setScore, setPage }) {
   useEffect(() => {
     async function loadLevel() {
       try {
-        const data = await fetchLevel(1); 
+        const data = await fetchLevel(currentLevelId); 
         setLevel(data);
         setPlayerPos({ row: data.start.row, col : data.start.col });                 
       } catch (error) {
@@ -30,8 +30,10 @@ function GamePage({ playerName, score, setScore, setPage }) {
         setLoading(false);               
       }
     }
+
+    setLoading(true); // show the reload screen between every lvl
     loadLevel();
-  }, []); 
+  }, [currentLevelId]); 
 
   
   if (loading) return <div>Chargement...</div>;
@@ -104,10 +106,11 @@ function GamePage({ playerName, score, setScore, setPage }) {
       setModalmessage("You've ran into a trap hahahaha skill issues much ?")
     }
     if (tileValue === "E") { // sortie
-  setModalmessage("Well done you finished the level !");
-  setIsModalOpen(true);
-  setTimeout(() => {
-    setPage("end");
+    setModalmessage("Well done you finished the level !");
+    setIsModalOpen(true);
+    setTimeout(() => {
+    setIsModalOpen(false);
+    setCurrentLevelId((prev) => prev + 1); //go next lvel 
   }, 1500);
 }
 
