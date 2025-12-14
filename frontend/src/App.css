@@ -47,4 +47,17 @@ html, body {
   height: 100%;
   width: 100%;
 }
+.EndPage button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #2b8cff;
+  color: white;
+  cursor: pointer;
+}
 
+.EndPage button:hover {
+  background-color: #1e6fd9;
+}

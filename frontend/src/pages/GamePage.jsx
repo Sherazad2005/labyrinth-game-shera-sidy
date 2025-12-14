@@ -55,7 +55,6 @@ function GamePage({ playerName, score, setScore, setPage }) {
   }, 1500);
 }
 
-
     console.log("Clicked case :", x, y, "valeur :", tileValue);
   };
 
