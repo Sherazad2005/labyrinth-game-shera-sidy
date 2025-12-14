@@ -1,6 +1,9 @@
 const Tile = ({ value, onClick }) => {
     let className = "tile";
-    if (value === "S") className += " tile-start";
+    if (value === "P") className += " tile-player";
+    
+    
+    else if(value === "S") className += " tile-start";
 
     else if (value === "E") className += " tile-end";
 

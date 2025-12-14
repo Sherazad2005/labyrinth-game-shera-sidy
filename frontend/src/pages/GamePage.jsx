@@ -9,6 +9,8 @@ function GamePage({ playerName, score, setScore, setPage }) {
   
   const [level, setLevel] = useState(null);
   const [loading, setLoading] = useState(true);
+  
+  const [playerPos, setPlayerPos] = useState(null); //player position
 
   const [inventory, setInventory] = useState([]); //picked up items
 
@@ -20,7 +22,8 @@ function GamePage({ playerName, score, setScore, setPage }) {
     async function loadLevel() {
       try {
         const data = await fetchLevel(1); 
-        setLevel(data);                  
+        setLevel(data);
+        setPlayerPos({ row: data.start.row, col : data.start.col });                 
       } catch (error) {
         console.error("Erreur lors du chargement du niveau :", error);
       } finally {
@@ -36,19 +39,39 @@ function GamePage({ playerName, score, setScore, setPage }) {
 
   const handleTileClick = (y, x) => {
     const tileValue = level.grid[y][x];
+      
+    console.log("CLICK", y, x);
 
-    // tile key : k:color
+    //we need to check if the tile is next to our position we using the math function 
+    if (playerPos) {
+      const dist = 
+        Math.abs(playerPos.row - y) + Math.abs(playerPos.col -x);
+      if (dist !== 1) {
+        return;
+      }
+    }
 
-    if (tileValue.startWith("K:")) {
-      const color = tileValue.split(":")[1];
-      setInventory((prev) => [...prev,`Key:${color}`]);
-      setModalmessage(`You picked up a ${color}`);
+    // block with walls
+    if (tileValue === "W") {
+      setModalmessage("You ran into a wall try again lol");
       setIsModalOpen(true);
       return;
     }
 
+
+    // tile key : k:color
+
+    if (tileValue.startsWith("K:")) {
+      const color = tileValue.split(":")[1];
+      setInventory((prev) => [...prev,`Key:${color}`]);
+      setModalmessage(`You picked up a ${color}`);
+      setIsModalOpen(true);
+      setPlayerPos({ row: y, col: x });
+      return;
+    }
+
     // tuile porte : D:color
-    if (tileValue.startWith("D:")) {
+    if (tileValue.startsWith("D:")) {
       const color = tileValue.split(":")[1];
       const hasKey = inventory.includes(`Key:${color}`);
 
@@ -58,23 +81,24 @@ function GamePage({ playerName, score, setScore, setPage }) {
         return;
       }
 
-      setModalmessage(true);
-      // we gonna work on movement 
+      setModalmessage(`You opened the ${color} door gj`);
+      setIsModalOpen(true);
+      setPlayerPos({ row: y, col: x});
       return;
     }
-    
+
+    setPlayerPos({ row: y, col: x});
+
     if (tileValue === "C") {
       //Small bonus
       setScore((prev) => prev + 1);
       setModalmessage("You found a small treasure");
       setIsModalOpen(true);
-    } else if (tileValue === "W") {
-      //Wall
-      setModalmessage("You ran into a wall try again");
-      setIsModalOpen(true);
+
     } else if (tileValue === "T") {
       setScore((prev) => prev + 10);
       setModalmessage("You've found a huge chest !!");
+
     } else if (tileValue === "P") {
       setScore((prev) => prev - 5);
       setModalmessage("You've ran into a trap hahahaha skill issues much ?")
@@ -101,7 +125,7 @@ function GamePage({ playerName, score, setScore, setPage }) {
 
       {/* main zone grid and inventory*/}
       <div className="game-layout">
-        <Grid grid={level.grid} onTileClick={handleTileClick} />
+        <Grid grid={level.grid} onTileClick={handleTileClick} playerPos={playerPos} />
           <Inventory items={inventory}/>
         </div>
         {/*text popup for success or defeat of the player*/}

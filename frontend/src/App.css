@@ -48,6 +48,7 @@ html, body {
   width: 100%;
 }
 
+.tile-player { background-color: cyan; }
 .tile-start { background-color: green; }
 .tile-end { background-color: gold; }
 .tile-wall { background-color: #333; }
