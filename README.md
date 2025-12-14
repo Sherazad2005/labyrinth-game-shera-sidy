@@ -1,51 +1,114 @@
-# Labyrinth Game – Shera & Sidy
+# Labyrinth Game – Sherazad & Sidy
 
-Jeu de labyrinthe en plusieurs niveaux où le joueur se déplace case par case en rencontrant parfois des obstacles à la recherche d'une sortie.
+Jeu de labyrinthe en **plusieurs niveaux** dans lequel le joueur se déplace **case par case** à la recherche de la **sortie**.  
+Le joueur rencontrera des **murs**, **portes verrouillées**, **clés de couleurs**, **ennemis**, **pièges** et **objets interactifs**.
 
-Des clés de couleurs avec des portes correspondantes sont présentes, ainsi que des ennemis et autres objets.
+---
+
+## Objectif du projet
+
+Le but du projet est de :
+- Consommer une **API** fournie (JSON)
+- Récupérer dynamiquement les éléments du jeu (objets, portes, ennemis, pièges…)
+- Les afficher et les gérer via un **frontend en React.js**
+- Implémenter une **logique de gameplay complète**
+
+---
 
 ## Technologies utilisées
 
-**Front-end**
+### Frontend
+- React
+- Vite
+- CSS
+- Axios
 
-L'interface utilisateur est développée avec React et Vite, avec CSS pour le styling.
+### Backend
+- Node.js
+- API REST basée sur JSON
 
-**Back-end**
-
-L'API utilise JSON pour fournir les données du jeu.
-
-## Installation
-
-Cloner le dépôt puis installer les dépendances :
-
-```bash
-git clone https://github.com/Sherazad2005/labyrinth-game-shera-sidy.git
-cd labyrinth-game-shera-sidy
-npm install
-```
-
-Lancer le projet en mode développement :
-
-```bash
-npm run dev
-```
+---
 
 ## Architecture du projet
 
-Le but était de récupérer via l'API donnée les éléments du jeu (objets, portes, ennemis, pièges) afin de les afficher et de créer les différentes fonctionnalités associées à ces derniers.
+### Frontend
 
-**Frontend**
+Le frontend est composé de plusieurs composants React :
 
-Gestion des différents composants : Grid pour la grille du jeu, Inventory pour l'inventaire du joueur, Modal pour les modales d'information, StatusBar pour afficher l'état du joueur, et Tile pour représenter chaque case individuelle.
+- **Grid** : affichage et gestion de la grille du labyrinthe
+- **Tile** : représentation d'une case (mur, sol, objet, joueur, etc.)
+- **Inventory** : inventaire du joueur
+- **Modal** : affichage des messages et événements
+- **StatusBar** : affichage du score, du niveau et du nom du joueur
 
-**Backend**
+Chaque composant a un rôle précis afin d'assurer une bonne **lisibilité** et une **maintenabilité** du code.
 
-Gestion des package.json et du serveur.js qui contient les données de l'API.
+---
+
+### Backend
+
+Le backend :
+- Fournit les niveaux via l'API
+- Contient les fichiers `package.json`
+- Expose les routes dans `server.js`
+
+Les données du jeu sont stockées sous forme de fichiers **JSON**.
+
+---
+
+## Lancer le projet en local
+
+⚠️ Le **backend et le frontend doivent être lancés simultanément**.
+
+---
+
+### 1️⃣ Lancer le backend
+
+Dans un terminal :
+
+```bash
+cd backend
+npm install
+npm install axios
+npm start
+```
+
+Le serveur backend démarre sur **http://localhost:3000**.
+
+---
+
+### 2️⃣ Lancer le frontend
+
+Dans un autre terminal :
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Le frontend démarre sur **http://localhost:5173**.
+
+---
 
 ## Règles du jeu
 
-Le joueur doit atteindre la sortie pour terminer le niveau. Certaines portes nécessitent une clé de couleur correspondante pour être franchies. Les ennemis et pièges représentent des obstacles qu'il faut éviter ou surmonter.
+Le joueur doit atteindre la **sortie** pour terminer le niveau.
+
+- Certaines **portes** nécessitent une **clé de couleur** correspondante pour être franchies.
+- Les **ennemis** et **pièges** représentent des obstacles qu'il faut éviter ou surmonter.
+- Les **obstacles** (rocher, eau, feu, etc.) peuvent être surmontés grâce aux **objets**.
+
+Le but est d'atteindre la sortie.
+
+---
+
+## Lien du premier repo GitHub
+
+[https://github.com/ydis/Projet_frontend-Sidy_Sherazade](https://github.com/ydis/Projet_frontend-Sidy_Sherazade)
+
+---
 
 ## Auteurs
 
-Projet réalisé par Sherazad et Sidy.
+Projet réalisé par **Sherazad** et **Sidy**.
