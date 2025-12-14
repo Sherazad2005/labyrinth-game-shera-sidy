@@ -1,6 +1,6 @@
 import Tile from "./Tile";
 
-const Grid = ({ grid, onTileClick, playerPos }) => {
+const Grid = ({ grid, onTileClick, playerPos, revealedTiles }) => {
     return (
         <div className="grid">
             {grid.map((row, rowIndex) => (
@@ -10,14 +10,16 @@ const Grid = ({ grid, onTileClick, playerPos }) => {
                         playerPos &&
                         playerPos.row === rowIndex &&
                         playerPos.col === colIndex;
-                    
+                    const isRevealed = revealedTiles.some((t => t.row === rowIndex && t.col === colIndex));
                     
                     return (
                       <Tile
-                        key={colIndex}
-                        value={isPlayerHere ? "P" : cell} // the point is to put P as the player position instead of S W etc...
+                        key ={colIndex}
+                        type={cell}
+                        isPlayer={isPlayerHere}
+                        isRevealed={isRevealed}
                         onClick={() => onTileClick(rowIndex, colIndex)}
-                        />
+                      />    
                     );
                 })}
                 </div>

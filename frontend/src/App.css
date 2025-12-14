@@ -28,18 +28,35 @@
 .tile {
   width: 60px;
   height: 60px;
-  flex: 1;
-  max-width: 60px;
-  border: none;
-  background: #1f2937;
-  color: #f9fafb;
+  border-radius: 6px;
   cursor: pointer;
-  border-radius: 4px;
 }
 
-.tile:hover {
-  background: #374151;
+.tile-hidden {
+  background-color: #2c2c2c;
 }
+
+.tile-path {
+  background-color: #2ecc71;
+}
+
+.tile-wall {
+  background-color: #e74c3c;
+}
+
+.tile-exit {
+  background-color: gold;
+}
+
+.tile-start {
+  background-color: #444;
+}
+
+.tile-player {
+  outline: 3px solid #3498db;
+}
+
+
 
 html, body {
   margin: 0;
@@ -48,13 +65,6 @@ html, body {
   width: 100%;
 }
 
-.tile-player { background-color: cyan; }
-.tile-start { background-color: green; }
-.tile-end { background-color: gold; }
-.tile-wall { background-color: #333; }
-.tile-path { background-color: #555; }
-.tile-door { background-color: purple; }
-.tile-key { background-color: teal; }
 
 .EndPage button {
   margin-top: 20px;
