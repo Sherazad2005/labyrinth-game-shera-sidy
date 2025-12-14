@@ -48,3 +48,11 @@ html, body {
   width: 100%;
 }
 
+.tile-start { background-color: green; }
+.tile-end { background-color: gold; }
+.tile-wall { background-color: #333; }
+.tile-path { background-color: #555; }
+.tile-door { background-color: purple; }
+.tile-key { background-color: teal; }
+
+

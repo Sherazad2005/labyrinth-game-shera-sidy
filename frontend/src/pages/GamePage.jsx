@@ -10,7 +10,7 @@ function GamePage({ playerName, score, setScore, setPage }) {
   const [level, setLevel] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [inventory, setInvetory] = useState([]); //picked up items
+  const [inventory, setInventory] = useState([]); //picked up items
 
   const [isModalOpen, setIsModalOpen] = useState(false); //end of the game popup
 
@@ -36,25 +36,56 @@ function GamePage({ playerName, score, setScore, setPage }) {
 
   const handleTileClick = (y, x) => {
     const tileValue = level.grid[y][x];
-    if (tileValue === 1) {
-      //treasure tile
-      setScore((prev) => prev + 10);
-      setModalmessage("You found a treasure");
+
+    // tile key : k:color
+
+    if (tileValue.startWith("K:")) {
+      const color = tileValue.split(":")[1];
+      setInventory((prev) => [...prev,`Key:${color}`]);
+      setModalmessage(`You picked up a ${color}`);
       setIsModalOpen(true);
-    } else if (tileValue === 2) {
-      //trap tile
-      setScore((prev) => prev - 5);
-      setModalmessage("YOU ACTIVATED A TRAP HAHAHAHA");
-      setIsModalOpen(true);
+      return;
     }
-    if (tileValue === 3) { // sortie
-  setModalmessage("Bravo, niveau terminé !");
+
+    // tuile porte : D:color
+    if (tileValue.startWith("D:")) {
+      const color = tileValue.split(":")[1];
+      const hasKey = inventory.includes(`Key:${color}`);
+
+      if (!hasKey) {
+        setModalmessage (`The ${color} door is lock go get the key lol`);
+        setIsModalOpen(true);
+        return;
+      }
+
+      setModalmessage(true);
+      // we gonna work on movement 
+      return;
+    }
+    
+    if (tileValue === "C") {
+      //Small bonus
+      setScore((prev) => prev + 1);
+      setModalmessage("You found a small treasure");
+      setIsModalOpen(true);
+    } else if (tileValue === "W") {
+      //Wall
+      setModalmessage("You ran into a wall try again");
+      setIsModalOpen(true);
+    } else if (tileValue === "T") {
+      setScore((prev) => prev + 10);
+      setModalmessage("You've found a huge chest !!");
+    } else if (tileValue === "P") {
+      setScore((prev) => prev - 5);
+      setModalmessage("You've ran into a trap hahahaha skill issues much ?")
+    }
+    if (tileValue === "E") { // sortie
+  setModalmessage("Well done you finished the level !");
   setIsModalOpen(true);
   setTimeout(() => {
     setPage("end");
   }, 1500);
 }
-
 
     console.log("Clicked case :", x, y, "valeur :", tileValue);
   };
@@ -71,6 +102,7 @@ function GamePage({ playerName, score, setScore, setPage }) {
       {/* main zone grid and inventory*/}
       <div className="game-layout">
         <Grid grid={level.grid} onTileClick={handleTileClick} />
+          <Inventory items={inventory}/>
         </div>
         {/*text popup for success or defeat of the player*/}
         <Modal
