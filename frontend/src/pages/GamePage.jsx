@@ -75,6 +75,7 @@ function GamePage({ playerName, score, setScore, setPage }) {
 
     // block with walls
     if (tileValue === "W") {
+      revealTile(y, x);
       setModalmessage("You ran into a wall try again lol");
       setIsModalOpen(true);
       return;
@@ -85,11 +86,20 @@ function GamePage({ playerName, score, setScore, setPage }) {
 
     if (tileValue.startsWith("K:")) {
       const color = tileValue.split(":")[1];
+      setLevel((prevLevel) => {
+        const newGrid = prevLevel.grid.map((row, rowIndex) =>
+          row.map((cell, colIndex) =>
+            rowIndex === y && colIndex === x ? "C_EMPTY" : cell
+          )
+        );
+        return { ...prevLevel, grid: newGrid };
+      });
+      setPlayerPos({ row: y, col: x });
+      revealTile(y, x);
       setInventory((prev) => [...prev,`Key:${color}`]);
       setModalmessage(`You picked up a ${color}`);
       setIsModalOpen(true);
-      setPlayerPos({ row: y, col: x });
-      revealTile(y, x);
+      
       return;
     }
 
@@ -104,9 +114,21 @@ function GamePage({ playerName, score, setScore, setPage }) {
         return;
       }
 
-      setModalmessage(`You opened the ${color} door gj`);
+      setInventory((prev) => prev.filter((item) => item !== `Key:${color}`));
+
+      setLevel((prevLevel) => {
+        const newGrid = prevLevel.grid.map((row, rowIndex) =>
+          row.map((cell, colIndex) =>
+            rowIndex === y && colIndex === x ? "C_EMPTY" : cell
+          )
+        );
+        return { ...prevLevel, grid: newGrid };
+      });
+
+      setModalmessage(`You unlocked the ${color} door`);
       setIsModalOpen(true);
-      setPlayerPos({ row: y, col: x});
+      setPlayerPos({ row: y, col: x });
+      revealTile(y, x);
       return;
     }
 
@@ -115,8 +137,18 @@ function GamePage({ playerName, score, setScore, setPage }) {
 
 
     if (tileValue === "C") {
-      //Small bonus
       setScore((prev) => prev + 1);
+      
+    
+      setLevel((prevLevel) => {
+        const newGrid = prevLevel.grid.map((row, rowIndex) =>
+          row.map((cell, colIndex) => 
+            rowIndex === y && colIndex === x ? "C_EMPTY" : cell
+          )
+        );
+        return { ...prevLevel, grid: newGrid };
+      });
+
       setModalmessage("You found a small treasure");
       setIsModalOpen(true);
 
